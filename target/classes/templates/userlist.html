@@ -5,17 +5,23 @@
     <title>UserList</title>
 </head>
 <body>
+<style>
+    input.name{
+        text-transform: capitalize;
+    }
+</style>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.15/jquery.mask.min.js"></script>
+<script>
+    $(function(){
+        $("#phone").mask("+7 (999) 999-99-99");
+    });
+</script>
+
 <form method="post" name="user" action="http://localhost:8080/user/userlist/">
-    <input name="firstName" placeholder="Имя" required pattern="[A-ZА-Я][a-zа-я]+"/>
-    <input name="lastName" placeholder="Фамилия" required/>
+    <input class="name" name="firstName" id="firstName" placeholder="Имя" required />
+    <input class="name" name="lastName" id="lastName" placeholder="Фамилия" required/>
     <input name="phoneNumber" id="phone" placeholder="Телефон"/>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.15/jquery.mask.min.js"></script>
-    <script>
-        $(function(){
-            $("#phone").mask("+7 (999) 999-99-99");
-        });
-    </script>
     <input name="email" placeholder="Почта" required autocomplete="on" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"/>
     <input type="submit" value="Add"/>
 </form>
@@ -33,7 +39,6 @@
         <td colspan="2"> No Users Available </td>
     </tr>
     <tr th:each="user : ${userList}">
-        <td><span th:text="${user.id}"> </span></td>
         <td><span th:text="${user.firstName}"> </span></td>
         <td><span th:text="${user.lastName}">  </span></td>
         <td><span th:text="${user.phoneNumber}">  </span></td>
