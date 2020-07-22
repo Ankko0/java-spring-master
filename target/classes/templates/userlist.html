@@ -10,7 +10,6 @@
         text-transform: capitalize;
     }
 </style>
-
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.15/jquery.mask.min.js"></script>
 <script>
@@ -19,22 +18,7 @@
     });
 </script>
 
-
-<script>
-    function Edit(currState) {
-        let temp =  document.getElementsByClassName("inputRow") ;
-        for (let i = 0; i < temp.length; i++) {
-            temp[i].disabled = !temp[i].disabled;
-        }
-        if (currState == "Edit")
-            document.getElementById("Edit").innerText = "Save";
-        else
-            document.getElementById("Edit").innerText = "Edit";
-    }
-</script>
-
 <form method="post" name="user" action="http://localhost:8080/user/userlist/">
-
     <input class="name" name="firstName" id="firstName" placeholder="Имя" required />
     <input class="name" name="lastName" id="lastName" placeholder="Фамилия" required/>
     <input name="phoneNumber" id="phone" placeholder="Телефон"/>
@@ -44,7 +28,6 @@
 <table>
     <thead>
     <tr>
-        <th> ID </th>
         <th> Имя </th>
         <th> Фамилия </th>
         <th> Телефон </th>
@@ -53,27 +36,15 @@
     </thead>
     <tbody>
     <tr th:if="${userList.isEmpty()}">
-        <td> No Users Available </td>
+        <td colspan="2"> No Users Available </td>
     </tr>
     <tr th:each="user : ${userList}">
-        <form class="my-form" th:action="@{/user/editUser(id=${user.id})}" method="put" name="user">
-            <td><input class="inputRow" name="id" disabled th:value="${user.id}"> </input></td>
-            <td><input class="inputRow" name="firstName" disabled th:value="${user.firstName}"> </input></td>
-            <td><input class="inputRow" name="lastName" disabled th:value="${user.lastName}">  </input></td>
-            <td><input class="inputRow" name="phoneNumber" disabled th:value="${user.phoneNumber}">  </input></td>
-            <td><input class="inputRow" name="email" disabled th:value="${user.email}">  </input></td>
-            <td><input type="submit" onclick="Edit(this.Text)" >  </input></td>
-        </form>
-            <td>
-                <span>
-
-                        <a id="Edit" onclick="Edit(this.innerText)" th:href="@{/user/edituser(id=${user.id})}">Edit</a>
-
-                </span>
-            </td>
-
-
+        <td><span th:text="${user.firstName}"> </span></td>
+        <td><span th:text="${user.lastName}">  </span></td>
+        <td><span th:text="${user.phoneNumber}">  </span></td>
+        <td><span th:text="${user.email}">  </span></td>
         <td><span><a th:href="@{/user/deleteUser(id=${user.id})}">Delete</a></span> </td>
+
     </tr>
     </tbody>
 </table>
