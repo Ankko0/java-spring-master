@@ -18,20 +18,30 @@
         $("#phone").mask("+7 (999) 999-99-99");
     });
 </script>
-
+<script>
+    $(document).ready(function(){
+        $(".editButton").click(function(){
+            $("#Edit").hide();
+        });
+        $("#show").click(function(){
+            $("#Save").show();
+        });
+    });
+</script>
 
 <script>
     function Edit(currState) {
+        let buttons = document.getElementsByClassName("editButton");
+        for (let i = 0; i < buttons.length; i++) {
+            buttons[i].hidden = !buttons[i].hidden;
+        }
         let temp =  document.getElementsByClassName("inputRow") ;
         for (let i = 0; i < temp.length; i++) {
             temp[i].disabled = !temp[i].disabled;
         }
-        if (currState == "Edit")
-            document.getElementById("Edit").innerText = "Save";
-        else
-            document.getElementById("Edit").innerText = "Edit";
     }
 </script>
+
 
 <form method="post" name="user" action="http://localhost:8080/user/userlist/">
 
@@ -56,22 +66,15 @@
         <td> No Users Available </td>
     </tr>
     <tr th:each="user : ${userList}">
-        <form class="my-form" th:action="@{/user/editUser(id=${user.id})}" method="put" name="user">
+        <form method="post" name="user" th:action="@{/user/edituser}">
             <td><input class="inputRow" name="id" disabled th:value="${user.id}"> </input></td>
             <td><input class="inputRow" name="firstName" disabled th:value="${user.firstName}"> </input></td>
             <td><input class="inputRow" name="lastName" disabled th:value="${user.lastName}">  </input></td>
             <td><input class="inputRow" name="phoneNumber" disabled th:value="${user.phoneNumber}">  </input></td>
             <td><input class="inputRow" name="email" disabled th:value="${user.email}">  </input></td>
-            <td><input type="submit" onclick="Edit(this.Text)" >  </input></td>
+            <td><input type="submit" class="editButton" id="Save" value="Save"  hidden ></input></td>
         </form>
-            <td>
-                <span>
-
-                        <a id="Edit" onclick="Edit(this.innerText)" th:href="@{/user/edituser(id=${user.id})}">Edit</a>
-
-                </span>
-            </td>
-
+        <td><input type="submit" class="editButton" id="Edit" value="Edit" onclick="Edit()" ></input></td>
 
         <td><span><a th:href="@{/user/deleteUser(id=${user.id})}">Delete</a></span> </td>
     </tr>

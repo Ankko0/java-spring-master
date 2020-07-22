@@ -49,45 +49,13 @@ public class UsersController {
         return "redirect:/user/userlist";
     }
 
-    /*@RequestParam(name = "id") String id,
-                           @RequestParam(required = false) String firstName,
-                           @RequestParam(required = false) String secondName,
-                           @RequestParam(required = false) String phoneNumber,
-                           @RequestParam(required = false) String email
-                           */
-    @PutMapping("/edituser")
-    public String editUser(@RequestParam(name = "id") String id,
-                            @RequestParam(required = false) String firstName,
-                            @RequestParam(required = false) String secondName,
-                            @RequestParam(required = false) String phoneNumber,
-                            @RequestParam(required = false) String email) {
-
-        Optional<User> user = userRepository.findById(Long.valueOf(id));
-
-        if (user.isPresent()){
-
-            User u = user.get();
-
-            if (firstName != null)
-                u.setFirstName(firstName);
-
-            if (secondName != null)
-                u.setLastName(secondName);
-
-            if (phoneNumber != null)
-                u.setPhoneNumber(phoneNumber);
-
-            if (email != null)
-                u.setEmail(email);
-
-            userRepository.save(u);
+    @PostMapping("/edituser")
+    public String editUser(@RequestParam(name = "id", required = false) Long id,
+                           @ModelAttribute("user") User user) {
+            user.setId(id);
+            userRepository.save(user);
             return "redirect:/user/userlist";
         }
-
-        return "redirect:/user/userlist";
-        }
-
-
 
 }
 
