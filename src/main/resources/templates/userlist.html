@@ -15,26 +15,21 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.15/jquery.mask.min.js"></script>
 <script>
     $(function(){
-        $("#phone").mask("+7 (999) 999-99-99");
+        $(".inputPhone").mask("+7 (999) 999-99-99");
     });
 </script>
 <script>
     $(document).ready(function(){
         $(".editButton").click(function(){
-            $("#Edit").hide();
-        });
-        $("#show").click(function(){
-            $("#Save").show();
+            $(".saveButton").show();
+            $(".editButton").hide();
+            Edit();
         });
     });
 </script>
 
 <script>
-    function Edit(currState) {
-        let buttons = document.getElementsByClassName("editButton");
-        for (let i = 0; i < buttons.length; i++) {
-            buttons[i].hidden = !buttons[i].hidden;
-        }
+    function Edit() {
         let temp =  document.getElementsByClassName("inputRow") ;
         for (let i = 0; i < temp.length; i++) {
             temp[i].disabled = !temp[i].disabled;
@@ -45,9 +40,9 @@
 
 <form method="post" name="user" action="http://localhost:8080/user/userlist/">
 
-    <input class="name" name="firstName" id="firstName" placeholder="Имя" required />
-    <input class="name" name="lastName" id="lastName" placeholder="Фамилия" required/>
-    <input name="phoneNumber" id="phone" placeholder="Телефон"/>
+    <input class="name" name="firstName" id="firstName" placeholder="Имя" pattern="[A-Za-zА-Яа-яЁё]+" required />
+    <input class="name" name="lastName" id="lastName" placeholder="Фамилия" pattern="[A-Za-zА-Яа-яЁё]+" required/>
+    <input class="inputPhone" name="phoneNumber" id="phone" placeholder="Телефон" pattern="/^+\d[\d\(\)\ -]{4,14}\d$/" required/>
     <input name="email" placeholder="Почта" required autocomplete="on" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"/>
     <input type="submit" value="Add"/>
 </form>
@@ -66,16 +61,15 @@
         <td> No Users Available </td>
     </tr>
     <tr th:each="user : ${userList}">
-        <form method="post" name="user" th:action="@{/user/edituser}">
-            <td><input class="inputRow" name="id" disabled th:value="${user.id}"> </input></td>
-            <td><input class="inputRow" name="firstName" disabled th:value="${user.firstName}"> </input></td>
-            <td><input class="inputRow" name="lastName" disabled th:value="${user.lastName}">  </input></td>
-            <td><input class="inputRow" name="phoneNumber" disabled th:value="${user.phoneNumber}">  </input></td>
-            <td><input class="inputRow" name="email" disabled th:value="${user.email}">  </input></td>
-            <td><input type="submit" class="editButton" id="Save" value="Save"  hidden ></input></td>
+        <form method="post" name="user" th:action="@{/user/edituser(id=${user.id})}">
+            <td><input name="id" disabled th:value="${user.id}"> </input></td>
+            <td><input class="inputRow" name="firstName" required disabled th:value="${user.firstName}" pattern="[A-Za-zА-Яа-яЁё]+"> </input></td>
+            <td><input class="inputRow" name="lastName" required disabled th:value="${user.lastName}" pattern="[A-Za-zА-Яа-яЁё]+">  </input></td>
+            <td><input class="inputRow inputPhone" name="phoneNumber" required disabled th:value="${user.phoneNumber}">  </input></td>
+            <td><input class="inputRow" name="email" required disabled th:value="${user.email}" autocomplete="on" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$">  </input></td>
+            <td><input type="submit" class="saveButton" id="Save" value="Save"  hidden ></input></td>
         </form>
-        <td><input type="submit" class="editButton" id="Edit" value="Edit" onclick="Edit()" ></input></td>
-
+        <td><input type="submit" class="editButton" id="Edit" value="Edit" ></input></td>
         <td><span><a th:href="@{/user/deleteUser(id=${user.id})}">Delete</a></span> </td>
     </tr>
     </tbody>

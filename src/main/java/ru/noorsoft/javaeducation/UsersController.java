@@ -50,10 +50,11 @@ public class UsersController {
     }
 
     @PostMapping("/edituser")
-    public String editUser(@RequestParam(name = "id", required = false) Long id,
+    public String editUser(@RequestParam(name = "id") Long id,
                            @ModelAttribute("user") User user) {
             user.setId(id);
-            userRepository.save(user);
+            logger.info("User " + userRepository.save(user) + " has been changed");
+
             return "redirect:/user/userlist";
         }
 
